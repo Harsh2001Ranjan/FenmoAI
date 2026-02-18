@@ -44,11 +44,11 @@ export default function ExpenseList({ expenses, loading, onDeleted, onEdit }) {
                 <tbody>
                     {expenses.map((e) => (
                         <tr key={e._id}>
-                            <td>{new Date(e.date).toLocaleDateString("en-IN")}</td>
-                            <td>
+                            <td data-label="Date">{new Date(e.date).toLocaleDateString("en-IN")}</td>
+                            <td data-label="Category">
                                 <span className="badge">{e.category}</span>
                             </td>
-                            <td>
+                            <td data-label="Description">
                                 {e.description}
                                 {e.revision > 1 && (
                                     <span className="revision-badge" title={`Revision ${e.revision}`}>
@@ -56,7 +56,7 @@ export default function ExpenseList({ expenses, loading, onDeleted, onEdit }) {
                                     </span>
                                 )}
                             </td>
-                            <td className="amount-col">₹{parseFloat(e.amount).toFixed(2)}</td>
+                            <td data-label="Amount" className="amount-col">₹{parseFloat(e.amount).toFixed(2)}</td>
                             <td className="action-col">
                                 <button
                                     className="btn-edit"

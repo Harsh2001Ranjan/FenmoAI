@@ -1,3 +1,4 @@
+/* ─── Reset ─── */
 *,
 *::before,
 *::after {
@@ -6,44 +7,78 @@
   padding: 0;
 }
 
-body {
-  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
-  background: #f5f5f5;
-  color: #1a1a1a;
-  font-size: 15px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+/* ─── Green Theme Palette ─── */
+:root {
+  --green-50: #e8f5e9;
+  --green-100: #c8e6c9;
+  --green-200: #a5d6a7;
+  --green-400: #66bb6a;
+  --green-600: #43a047;
+  --green-700: #388e3c;
+  --green-800: #2e7d32;
+  --green-900: #1b5e20;
+  --red-50: #fdecea;
+  --red-700: #c62828;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --radius: 10px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
+/* ─── Body ─── */
+body {
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: var(--gray-100);
+  color: var(--gray-800);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── App Shell ─── */
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
+/* ─── Header ─── */
 .app-header {
-  background: #1a1a1a;
+  background: linear-gradient(135deg, var(--green-800), var(--green-600));
   color: #fff;
-  padding: 1.25rem 2rem;
+  padding: 1.5rem 2rem;
+  box-shadow: var(--shadow-md);
 }
 
 .app-header h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 0.1rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.15rem;
 }
 
 .app-header p {
-  font-size: 0.85rem;
-  color: #aaa;
+  font-size: 0.88rem;
+  color: var(--green-100);
+  font-weight: 400;
 }
 
+/* ─── Main Layout ─── */
 .app-main {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 340px 1fr;
   gap: 1.5rem;
   padding: 1.5rem 2rem;
-  max-width: 1100px;
+  max-width: 1140px;
   width: 100%;
   margin: 0 auto;
   flex: 1;
@@ -56,20 +91,23 @@ body {
   gap: 1rem;
 }
 
+/* ─── Form ─── */
 .expense-form {
   background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .expense-form h2 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--green-800);
+  letter-spacing: -0.01em;
 }
 
 .form-row {
@@ -80,74 +118,144 @@ body {
 
 .form-row label {
   font-size: 0.8rem;
-  font-weight: 500;
-  color: #555;
+  font-weight: 600;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .form-row input,
 .form-row select {
-  padding: 0.5rem 0.65rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--gray-300);
+  border-radius: 6px;
   font-size: 0.9rem;
-  background: #fafafa;
-  color: #1a1a1a;
+  background: var(--gray-50);
+  color: var(--gray-800);
   outline: none;
-  transition: border-color 0.15s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-row input:focus,
 .form-row select:focus {
-  border-color: #1a1a1a;
+  border-color: var(--green-600);
+  box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.15);
   background: #fff;
 }
 
-.expense-form button {
+.expense-form>button {
   margin-top: 0.25rem;
-  padding: 0.6rem;
-  background: #1a1a1a;
+  padding: 0.65rem;
+  background: var(--green-700);
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.2s, transform 0.1s;
 }
 
-.expense-form button:disabled {
-  background: #888;
+.expense-form>button:disabled {
+  background: var(--gray-400);
   cursor: not-allowed;
 }
 
-.expense-form button:not(:disabled):hover {
-  background: #333;
+.expense-form>button:not(:disabled):hover {
+  background: var(--green-800);
 }
 
+.expense-form>button:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+/* ─── Form Status ─── */
 .form-status {
   font-size: 0.82rem;
-  padding: 0.4rem 0.6rem;
-  border-radius: 4px;
+  padding: 0.45rem 0.7rem;
+  border-radius: 6px;
+  font-weight: 500;
 }
 
 .form-status.success {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: var(--green-50);
+  color: var(--green-800);
+  border: 1px solid var(--green-200);
 }
 
 .form-status.error {
-  background: #fdecea;
-  color: #c62828;
+  background: var(--red-50);
+  color: var(--red-700);
 }
 
+/* ─── Field Errors ─── */
+.field-error {
+  font-size: 0.75rem;
+  color: var(--red-700);
+  margin-top: 0.1rem;
+  font-weight: 500;
+}
+
+/* ─── Form Actions ─── */
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.form-actions button[type="submit"] {
+  flex: 1;
+  padding: 0.65rem;
+  background: var(--green-700);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.form-actions button[type="submit"]:disabled {
+  background: var(--gray-400);
+  cursor: not-allowed;
+}
+
+.form-actions button[type="submit"]:not(:disabled):hover {
+  background: var(--green-800);
+}
+
+.form-actions button[type="submit"]:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+.btn-cancel {
+  padding: 0.65rem 1.1rem;
+  background: none;
+  border: 1px solid var(--gray-300);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: var(--gray-500);
+  font-weight: 500;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-cancel:hover {
+  border-color: var(--green-600);
+  color: var(--green-700);
+}
+
+/* ─── Filters ─── */
 .filters {
   display: flex;
   gap: 1rem;
   background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
   padding: 1rem 1.25rem;
   flex-wrap: wrap;
+  box-shadow: var(--shadow-sm);
 }
 
 .filter-group {
@@ -160,45 +268,51 @@ body {
 
 .filter-group label {
   font-size: 0.78rem;
-  font-weight: 500;
-  color: #555;
+  font-weight: 600;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .filter-group select {
   padding: 0.45rem 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid var(--gray-300);
+  border-radius: 6px;
   font-size: 0.88rem;
-  background: #fafafa;
-  color: #1a1a1a;
+  background: var(--gray-50);
+  color: var(--gray-800);
   outline: none;
   cursor: pointer;
+  transition: border-color 0.2s;
 }
 
 .filter-group select:focus {
-  border-color: #1a1a1a;
+  border-color: var(--green-600);
 }
 
+/* ─── Summary ─── */
 .summary {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.6rem 0.25rem;
   font-size: 0.88rem;
-  color: #555;
+  color: var(--gray-500);
 }
 
 .summary .total {
-  font-weight: 700;
-  font-size: 1rem;
-  color: #1a1a1a;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--green-800);
 }
 
+/* ─── Table ─── */
 .table-wrapper {
   background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
   overflow: hidden;
+  box-shadow: var(--shadow-sm);
 }
 
 .expense-table {
@@ -208,176 +322,272 @@ body {
 }
 
 .expense-table thead {
-  background: #f0f0f0;
+  background: var(--green-50);
 }
 
 .expense-table th {
   text-align: left;
-  padding: 0.65rem 1rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #555;
+  padding: 0.7rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--green-800);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
 }
 
 .expense-table td {
-  padding: 0.7rem 1rem;
-  border-top: 1px solid #ebebeb;
-  color: #1a1a1a;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--gray-200);
+  color: var(--gray-700);
 }
 
 .expense-table tbody tr:hover {
-  background: #fafafa;
+  background: var(--green-50);
 }
 
 .amount-col {
   text-align: right;
   font-variant-numeric: tabular-nums;
-  font-weight: 500;
+  font-weight: 600;
+  color: var(--gray-900);
 }
 
+/* ─── Badge ─── */
 .badge {
   display: inline-block;
-  padding: 0.2rem 0.55rem;
-  background: #ebebeb;
+  padding: 0.2rem 0.6rem;
+  background: var(--green-100);
+  color: var(--green-800);
   border-radius: 20px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: #333;
+  font-size: 0.76rem;
+  font-weight: 600;
   text-transform: capitalize;
 }
 
+/* ─── Revision Badge ─── */
+.revision-badge {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.1rem 0.4rem;
+  background: var(--green-50);
+  color: var(--green-700);
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+/* ─── State Messages ─── */
 .state-msg {
   padding: 1.5rem;
   text-align: center;
-  color: #888;
+  color: var(--gray-400);
   font-size: 0.9rem;
+  font-style: italic;
 }
 
 .state-msg.error {
-  color: #c62828;
+  color: var(--red-700);
+  font-style: normal;
+  font-weight: 500;
 }
 
-.field-error {
-  font-size: 0.75rem;
-  color: #c62828;
-  margin-top: 0.15rem;
-}
-
-.form-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
-}
-
-.form-actions button[type="submit"] {
-  flex: 1;
-  padding: 0.6rem;
-  background: #1a1a1a;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.form-actions button[type="submit"]:disabled {
-  background: #888;
-  cursor: not-allowed;
-}
-
-.form-actions button[type="submit"]:not(:disabled):hover {
-  background: #333;
-}
-
-.btn-cancel {
-  padding: 0.6rem 1rem;
-  background: none;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  color: #555;
-  transition: border-color 0.15s, color 0.15s;
-}
-
-.btn-cancel:hover {
-  border-color: #1a1a1a;
-  color: #1a1a1a;
-}
-
+/* ─── Action Buttons ─── */
 .action-col {
   text-align: right;
-  width: 110px;
+  width: 120px;
   white-space: nowrap;
 }
 
 .btn-edit {
   background: none;
   border: none;
-  color: #1a6fc4;
+  color: var(--green-700);
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  padding: 0.2rem 0.4rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 4px;
   margin-right: 0.25rem;
   transition: background 0.15s;
 }
 
 .btn-edit:hover {
-  background: #e8f0fe;
+  background: var(--green-50);
 }
 
 .btn-delete {
   background: none;
   border: none;
-  color: #c62828;
+  color: var(--red-700);
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  padding: 0.2rem 0.4rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 4px;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s;
 }
 
 .btn-delete:hover:not(:disabled) {
-  background: #fdecea;
+  background: var(--red-50);
 }
 
 .btn-delete:disabled {
-  color: #aaa;
+  color: var(--gray-400);
   cursor: not-allowed;
 }
 
-.revision-badge {
-  display: inline-block;
-  margin-left: 0.4rem;
-  padding: 0.1rem 0.35rem;
-  background: #e8f0fe;
-  color: #1a6fc4;
-  border-radius: 10px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  vertical-align: middle;
-}
-
+/* ─── Footer ─── */
 .app-footer {
   margin-top: auto;
-  padding: 1.5rem;
-  border-top: 1px solid #e0e0e0;
+  padding: 1.25rem;
+  border-top: 1px solid var(--gray-200);
   text-align: center;
-  color: #888;
+  color: var(--gray-400);
   font-size: 0.8rem;
+  font-weight: 500;
   background: #fff;
+  letter-spacing: 0.02em;
 }
 
-@media (max-width: 700px) {
+/* ─── Responsive: Tablet (≤ 900px) ─── */
+@media (max-width: 900px) {
   .app-main {
     grid-template-columns: 1fr;
-    padding: 1rem;
+    padding: 1.25rem;
+    gap: 1.25rem;
+  }
+
+  .expense-form {
+    max-width: 100%;
+  }
+}
+
+/* ─── Responsive: Mobile (≤ 600px) ─── */
+@media (max-width: 600px) {
+  .app-header {
+    padding: 1.1rem 1rem;
+    text-align: center;
+  }
+
+  .app-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .app-main {
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .expense-form {
+    padding: 1.1rem;
+  }
+
+  .filters {
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0.85rem;
+  }
+
+  .filter-group {
+    min-width: unset;
+  }
+
+  .summary {
+    flex-direction: column;
+    gap: 0.3rem;
+    text-align: center;
+  }
+
+  /* Card layout for expenses on mobile */
+  .table-wrapper {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .expense-table,
+  .expense-table thead,
+  .expense-table tbody,
+  .expense-table th,
+  .expense-table td,
+  .expense-table tr {
+    display: block;
+  }
+
+  .expense-table thead {
+    display: none;
+  }
+
+  .expense-table tbody tr {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    margin-bottom: 0.6rem;
+    padding: 0.85rem 1rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .expense-table td {
+    border-top: none;
+    padding: 0.2rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+
+  .expense-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--gray-500);
+    min-width: 80px;
+  }
+
+  .amount-col {
+    text-align: right;
+    font-size: 1rem;
+    color: var(--green-800);
+  }
+
+  .action-col {
+    width: 100%;
+    text-align: right;
+    padding-top: 0.4rem !important;
+    border-top: 1px solid var(--gray-200) !important;
+    margin-top: 0.3rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button[type="submit"],
+  .btn-cancel {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ─── Responsive: Small Mobile (≤ 380px) ─── */
+@media (max-width: 380px) {
+  body {
+    font-size: 14px;
+  }
+
+  .app-header h1 {
+    font-size: 1.15rem;
+  }
+
+  .expense-form {
+    padding: 0.9rem;
+  }
+
+  .form-row input,
+  .form-row select {
+    font-size: 0.85rem;
   }
 }

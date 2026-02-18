@@ -8,18 +8,38 @@ import { fetchExpenses } from "./services/api";
 import useDebounce from "./hooks/useDebounce";
 import "./App.css";
 
+/**
+ * App.jsx: The Root Orchestrator.
+ * Why is this a single large component? 
+ * For a small-to-medium app like this, centralising state here prevents 
+ * "prop drilling" and ensures the Chart, Summary, and List always stay 
+ * in perfect sync without needing a heavy state manager like Redux.
+ */
 export default function App() {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("");
   const [search, setSearch] = useState("");
+
+  // Why Debounce? Without it, every keystroke in the search bar triggers 
+  // an API call. Debouncing to 500ms ensures we only fetch once the user 
+  // pauses, reducing server load and preventing UI jitter.
   const debouncedSearch = useDebounce(search, 500);
+
   const [sortDesc, setSortDesc] = useState(false);
   const [fetchError, setFetchError] = useState(null);
   const [editingExpense, setEditingExpense] = useState(null);
+
+  // Server-side pagination state.
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  /**
+   * memoized fetcher.
+   * Why useCallback? This function is passed to child components. 
+   * If not memoized, it would be recreated on every render, triggering 
+   * unnecessary re-renders of the Form and Filter components.
+   */
   const loadExpenses = useCallback(async () => {
     setLoading(true);
     setFetchError(null);
@@ -41,11 +61,17 @@ export default function App() {
     }
   }, [category, sortDesc, page, debouncedSearch]);
 
+  // Initial load and dependency-based refresh.
   useEffect(() => {
     loadExpenses();
   }, [loadExpenses]);
 
-  // Reset page when filters change
+  /**
+   * Auto-reset to first page on filter change.
+   * Why? If a user is on page 5 and searches for something with only 1 page 
+   * of results, staying on page 5 would show an empty list. 
+   * Resetting to page 1 ensures the user sees the relevant results.
+   */
   useEffect(() => {
     setPage(1);
   }, [category, debouncedSearch]);
@@ -64,6 +90,7 @@ export default function App() {
             editingExpense={editingExpense}
             onCancelEdit={() => setEditingExpense(null)}
           />
+          {/* Shared state 'expenses' drives the Chart and Summary */}
           <CategoryChart expenses={expenses} />
         </section>
 

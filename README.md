@@ -154,20 +154,36 @@ cd server && npm test
 
 ---
 
-## Design Patterns
+## Architecture Decisions (Rationale)
+
+Understanding the "why" behind the design patterns used in FenmoAI.
 
 ### Strategy Pattern
-`sortStrategies.js` and `filterStrategies.js` encapsulate sort and filter behaviours as interchangeable classes. Adding a new sort order (e.g., amount ascending) requires only a new class — no changes to `ExpenseService`.
+*   **Location:** `/server/strategies`
+*   **Why?** To keep the `ExpenseService` clean and [Open/Closed](https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle). By offloading sort and filter logic to strategies, we can add complex filtering (e.g., date ranges, tax-deductible flags) without ever touching the core service logic. This prevents the "God Service" anti-pattern.
 
 ### Factory Pattern
-`ExpenseFactory.create()` centralises all data transformation (Decimal128 conversion, category normalisation). Validation is handled upstream by Zod middleware — the factory never touches raw user input.
+*   **Location:** `/server/factories`
+*   **Why?** To ensure data integrity between the network and the database. The `ExpenseFactory` acts as a translation layer—converting raw input into MongoDB-safe `Decimal128` types and normalising strings. This decoupling means the API structure can change without forcing a schema change, and vice versa.
+
+### Immutable Records (Revisioning)
+*   **Location:** `/server/models/Expense.js` & `ExpenseService.js`
+*   **Why?** Financial data should be auditable. Destructive edits/deletes make it impossible to track disputes or manual entry errors. By using a revision system, we maintain a complete historical tail. This "Append-only" mindset is a best practice in accounting systems.
+
+### Observability Middleware
+*   **Location:** `/server/middleware/logger.js` & `errorHandler.js`
+*   **Why?** Production stability. Standard `console.log` is insufficient for high-volume apps. We use **Morgan** for structured logging to disk and console, plus a custom **Performance Monitor** to catch slow queries early. Centralised error handling ensures failures are returned in a standard format, preventing stack trace leaks.
+
+---
+
+## Design Patterns & Principles
 
 ### SOLID Principles
-- **S** — Each class/module has one job (Controller = HTTP, Service = logic, Factory = creation, Strategy = query building, Middleware = validation)
-- **O** — New strategies extend behaviour without modifying existing code
-- **L** — All sort/filter strategies are interchangeable via a common `apply()` interface
-- **I** — Strategies expose only what they need (`apply(query)` or `apply(filters, value)`)
-- **D** — Service depends on strategy abstractions, not concrete implementations
+- **S (Single Responsibility)** — Each module has one job (Controller = HTTP, Service = Logic, Factory = Transform, Strategy = Query).
+- **O (Open/Closed)** — Adding a new sort order merely requires adding 5 lines to a strategy file, not modifying existing functions.
+- **L (Liskov Substitution)** — All sort strategies are interchangeable; `ExpenseService` doesn't care which one it calls as long as it has an `.apply()` method.
+- **I (Interface Segregation)** — Strategies only expose the minimal methods required for query modification.
+- **D (Dependency Inversion)** — High-level logic (Service) depends on abstractions (Strategy interface), not low-level query details.
 
 ---
 

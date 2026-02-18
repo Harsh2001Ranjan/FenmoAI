@@ -67,6 +67,9 @@ export default function App() {
           )}
         </section>
       </main>
+      <footer className="app-footer">
+        <p>Developed by Harsh Ranjan @2026</p>
+      </footer>
     </div>
   );
 }

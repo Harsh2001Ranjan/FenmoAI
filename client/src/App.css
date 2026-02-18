@@ -285,6 +285,16 @@ body {
   cursor: not-allowed;
 }
 
+.app-footer {
+  margin-top: auto;
+  padding: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+  color: #888;
+  font-size: 0.8rem;
+  background: #fff;
+}
+
 @media (max-width: 700px) {
   .app-main {
     grid-template-columns: 1fr;

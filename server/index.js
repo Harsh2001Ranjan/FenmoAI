@@ -7,11 +7,17 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 connectDB();
 
+const expenseRoutes = require("./routes/expenseRoutes");
+const { globalLimiter, writeLimiter } = require("./middleware/rateLimiter");
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(globalLimiter);
+
+app.use("/api/expenses", writeLimiter, expenseRoutes);
 
 app.get("/api/health", (req, res) => {
   const dbStates = ["disconnected", "connected", "connecting", "disconnecting"];

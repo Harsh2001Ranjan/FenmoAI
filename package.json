@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "FenmoAI - MERN Stack Application",
   "scripts": {
-    "dev": "concurrently \"node --watch server/index.js\" \"client/node_modules/.bin/vite.cmd client\" --names \"server,client\" --prefix-colors \"cyan,magenta\"",
+    "dev": "concurrently \"node --watch server/index.js\" \"npm run dev --prefix client\" --names \"server,client\" --prefix-colors \"cyan,magenta\"",
     "dev:server": "node --watch server/index.js",
-    "dev:client": "client/node_modules/.bin/vite.cmd client",
+    "dev:client": "npm run dev --prefix client",
     "install:all": "npm install && cd server && npm install && cd ../client && npm install",
     "build": "npm install --prefix client --include=dev && npm run build --prefix client",
     "start": "cd server && node index.js"

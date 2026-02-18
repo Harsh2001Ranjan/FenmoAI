@@ -1,74 +1,72 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { useState, useEffect, useCallback } from "react";
+import ExpenseForm from "./components/ExpenseForm";
+import ExpenseFilters from "./components/ExpenseFilters";
+import ExpenseList from "./components/ExpenseList";
+import ExpenseSummary from "./components/ExpenseSummary";
+import { fetchExpenses } from "./services/api";
+import "./App.css";
 
-function App() {
-  const [health, setHealth] = useState(null)
-  const [loading, setLoading] = useState(true)
+export default function App() {
+  const [expenses, setExpenses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState("");
+  const [sortDesc, setSortDesc] = useState(false);
+  const [fetchError, setFetchError] = useState(null);
+
+  const loadExpenses = useCallback(async () => {
+    setLoading(true);
+    setFetchError(null);
+    try {
+      const data = await fetchExpenses({
+        category: category || undefined,
+        sort: sortDesc ? "date_desc" : undefined,
+      });
+      setExpenses(data);
+    } catch {
+      setFetchError("Failed to load expenses. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }, [category, sortDesc]);
 
   useEffect(() => {
-    fetch('/api/health')
-      .then((res) => res.json())
-      .then((data) => {
-        setHealth(data)
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
-  }, [])
+    loadExpenses();
+  }, [loadExpenses]);
+
+  const handleCreated = () => {
+    loadExpenses();
+  };
 
   return (
     <div className="app">
-      <header className="header">
-        <h1>FenmoAI</h1>
-        <p className="subtitle">System Dashboard</p>
+      <header className="app-header">
+        <h1>Expense Tracker</h1>
+        <p>Track where your money goes</p>
       </header>
 
-      <main className="main">
-        <div className="card">
-          <h2>System Health</h2>
-          {loading ? (
-            <p className="loading">Checking server status...</p>
-          ) : health ? (
-            <div className="health-grid">
-              <div className="health-item">
-                <span className="label">Status</span>
-                <span className={`value status-${health.status}`}>
-                  {health.status.toUpperCase()}
-                </span>
-              </div>
-              <div className="health-item">
-                <span className="label">Environment</span>
-                <span className="value">{health.environment}</span>
-              </div>
-              <div className="health-item">
-                <span className="label">Uptime</span>
-                <span className="value">
-                  {Math.floor(health.uptime)}s
-                </span>
-              </div>
-              <div className="health-item">
-                <span className="label">Node Version</span>
-                <span className="value">{health.version}</span>
-              </div>
-              <div className="health-item">
-                <span className="label">Memory (Heap Used)</span>
-                <span className="value">
-                  {health.memoryUsage?.heapUsed}
-                </span>
-              </div>
-              <div className="health-item">
-                <span className="label">Timestamp</span>
-                <span className="value">
-                  {new Date(health.timestamp).toLocaleString()}
-                </span>
-              </div>
-            </div>
+      <main className="app-main">
+        <section className="form-section">
+          <ExpenseForm onCreated={handleCreated} />
+        </section>
+
+        <section className="list-section">
+          <ExpenseFilters
+            category={category}
+            sortDesc={sortDesc}
+            onCategoryChange={setCategory}
+            onSortChange={setSortDesc}
+          />
+
+          {fetchError ? (
+            <p className="state-msg error">{fetchError}</p>
           ) : (
-            <p className="error">Unable to reach server</p>
+            <>
+              <ExpenseSummary expenses={expenses} />
+              <ExpenseList expenses={expenses} loading={loading} onDeleted={loadExpenses} />
+            </>
           )}
-        </div>
+        </section>
       </main>
     </div>
-  )
+  );
 }
-
-export default App

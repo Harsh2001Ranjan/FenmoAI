@@ -26,6 +26,19 @@ const expenseSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    revision: {
+      type: Number,
+      default: 1,
+    },
+    originalId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Expense",
+      default: null,
+    },
   },
   { timestamps: true }
 );

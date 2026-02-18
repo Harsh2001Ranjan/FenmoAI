@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { deleteExpense } from "../services/api";
 
-export default function ExpenseList({ expenses, loading, onDeleted }) {
+export default function ExpenseList({ expenses, loading, onDeleted, onEdit }) {
     const [deletingId, setDeletingId] = useState(null);
 
     const handleDelete = async (expense) => {
@@ -48,9 +48,23 @@ export default function ExpenseList({ expenses, loading, onDeleted }) {
                             <td>
                                 <span className="badge">{e.category}</span>
                             </td>
-                            <td>{e.description}</td>
+                            <td>
+                                {e.description}
+                                {e.revision > 1 && (
+                                    <span className="revision-badge" title={`Revision ${e.revision}`}>
+                                        v{e.revision}
+                                    </span>
+                                )}
+                            </td>
                             <td className="amount-col">₹{parseFloat(e.amount).toFixed(2)}</td>
                             <td className="action-col">
+                                <button
+                                    className="btn-edit"
+                                    onClick={() => onEdit(e)}
+                                    title="Edit expense"
+                                >
+                                    Edit
+                                </button>
                                 <button
                                     className="btn-delete"
                                     onClick={() => handleDelete(e)}

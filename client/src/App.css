@@ -259,9 +259,77 @@ body {
   color: #c62828;
 }
 
+.field-error {
+  font-size: 0.75rem;
+  color: #c62828;
+  margin-top: 0.15rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.form-actions button[type="submit"] {
+  flex: 1;
+  padding: 0.6rem;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.form-actions button[type="submit"]:disabled {
+  background: #888;
+  cursor: not-allowed;
+}
+
+.form-actions button[type="submit"]:not(:disabled):hover {
+  background: #333;
+}
+
+.btn-cancel {
+  padding: 0.6rem 1rem;
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #555;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-cancel:hover {
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+}
+
 .action-col {
   text-align: right;
-  width: 72px;
+  width: 110px;
+  white-space: nowrap;
+}
+
+.btn-edit {
+  background: none;
+  border: none;
+  color: #1a6fc4;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  margin-right: 0.25rem;
+  transition: background 0.15s;
+}
+
+.btn-edit:hover {
+  background: #e8f0fe;
 }
 
 .btn-delete {
@@ -283,6 +351,18 @@ body {
 .btn-delete:disabled {
   color: #aaa;
   cursor: not-allowed;
+}
+
+.revision-badge {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.1rem 0.35rem;
+  background: #e8f0fe;
+  color: #1a6fc4;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  vertical-align: middle;
 }
 
 .app-footer {

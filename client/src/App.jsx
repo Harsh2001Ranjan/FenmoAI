@@ -12,6 +12,7 @@ export default function App() {
   const [category, setCategory] = useState("");
   const [sortDesc, setSortDesc] = useState(false);
   const [fetchError, setFetchError] = useState(null);
+  const [editingExpense, setEditingExpense] = useState(null);
 
   const loadExpenses = useCallback(async () => {
     setLoading(true);
@@ -22,8 +23,8 @@ export default function App() {
         sort: sortDesc ? "date_desc" : undefined,
       });
       setExpenses(data);
-    } catch {
-      setFetchError("Failed to load expenses. Please try again.");
+    } catch (err) {
+      setFetchError(err.message || "Failed to load expenses. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -32,10 +33,6 @@ export default function App() {
   useEffect(() => {
     loadExpenses();
   }, [loadExpenses]);
-
-  const handleCreated = () => {
-    loadExpenses();
-  };
 
   return (
     <div className="app">
@@ -46,7 +43,11 @@ export default function App() {
 
       <main className="app-main">
         <section className="form-section">
-          <ExpenseForm onCreated={handleCreated} />
+          <ExpenseForm
+            onCreated={loadExpenses}
+            editingExpense={editingExpense}
+            onCancelEdit={() => setEditingExpense(null)}
+          />
         </section>
 
         <section className="list-section">
@@ -62,11 +63,17 @@ export default function App() {
           ) : (
             <>
               <ExpenseSummary expenses={expenses} />
-              <ExpenseList expenses={expenses} loading={loading} onDeleted={loadExpenses} />
+              <ExpenseList
+                expenses={expenses}
+                loading={loading}
+                onDeleted={loadExpenses}
+                onEdit={setEditingExpense}
+              />
             </>
           )}
         </section>
       </main>
+
       <footer className="app-footer">
         <p>Developed by Harsh Ranjan @2026</p>
       </footer>

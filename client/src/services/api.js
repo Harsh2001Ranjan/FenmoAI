@@ -19,15 +19,17 @@ async function handleResponse(res, defaultMsg) {
   return res.json();
 }
 
-export async function fetchExpenses({ category, sort } = {}) {
+export const fetchExpenses = async ({ category, sort, page = 1, limit = 10, search = "" } = {}) => {
   const params = new URLSearchParams();
   if (category) params.append("category", category);
   if (sort) params.append("sort", sort);
+  if (page) params.append("page", page);
+  if (limit) params.append("limit", limit);
+  if (search) params.append("search", search);
 
-  const url = params.toString() ? `${BASE}?${params}` : BASE;
-  const res = await fetch(url);
+  const res = await fetch(`${BASE}?${params}`);
   return handleResponse(res, "Failed to fetch expenses");
-}
+};
 
 export async function createExpense(data) {
   const res = await fetch(BASE, {

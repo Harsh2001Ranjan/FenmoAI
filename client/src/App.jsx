@@ -5,35 +5,50 @@ import ExpenseFilters from "./components/ExpenseFilters";
 import ExpenseList from "./components/ExpenseList";
 import ExpenseSummary from "./components/ExpenseSummary";
 import { fetchExpenses } from "./services/api";
+import useDebounce from "./hooks/useDebounce";
 import "./App.css";
 
 export default function App() {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("");
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 500);
   const [sortDesc, setSortDesc] = useState(false);
   const [fetchError, setFetchError] = useState(null);
   const [editingExpense, setEditingExpense] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const loadExpenses = useCallback(async () => {
     setLoading(true);
     setFetchError(null);
     try {
-      const data = await fetchExpenses({
+      const { data, meta } = await fetchExpenses({
         category: category || undefined,
         sort: sortDesc ? "date_desc" : undefined,
+        page,
+        limit: 10,
+        search: debouncedSearch || undefined,
       });
       setExpenses(data);
+      setTotalPages(meta.pages);
+      setPage(meta.page);
     } catch (err) {
       setFetchError(err.message || "Failed to load expenses. Please try again.");
     } finally {
       setLoading(false);
     }
-  }, [category, sortDesc]);
+  }, [category, sortDesc, page, debouncedSearch]);
 
   useEffect(() => {
     loadExpenses();
   }, [loadExpenses]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [category, debouncedSearch]);
 
   return (
     <div className="app">
@@ -58,6 +73,8 @@ export default function App() {
             sortDesc={sortDesc}
             onCategoryChange={setCategory}
             onSortChange={setSortDesc}
+            search={search}
+            onSearchChange={setSearch}
           />
 
           {fetchError ? (
@@ -70,6 +87,9 @@ export default function App() {
                 loading={loading}
                 onDeleted={loadExpenses}
                 onEdit={setEditingExpense}
+                page={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
               />
             </>
           )}

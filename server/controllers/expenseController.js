@@ -17,9 +17,15 @@ const createExpense = async (req, res) => {
 
 const getExpenses = async (req, res) => {
   try {
-    const { category, sort } = req.query;
-    const expenses = await expenseService.getExpenses({ category, sort });
-    res.status(200).json(expenses);
+    const { category, sort, page, limit, search } = req.query;
+    const result = await expenseService.getExpenses({
+      category,
+      sort,
+      page: page ? parseInt(page) : 1,
+      limit: limit ? parseInt(limit) : 50,
+      search,
+    });
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

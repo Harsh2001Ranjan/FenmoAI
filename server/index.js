@@ -5,24 +5,27 @@ const mongoose = require("mongoose");
 const connectDB = require("./config/db");
 require("dotenv").config({ path: path.join(__dirname, ".env") });
 
-connectDB();
-
 const expenseRoutes = require("./routes/expenseRoutes");
 const { globalLimiter, writeLimiter } = require("./middleware/rateLimiter");
+const logger = require("./middleware/logger");
+const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
+app.use(logger()); // Application logging + Performance monitoring
 app.use(globalLimiter);
 
+// Routes
 app.use("/api/expenses", writeLimiter, expenseRoutes);
 
 app.get("/api/health", (req, res) => {
   const dbStates = ["disconnected", "connected", "connecting", "disconnecting"];
 
-  const healthStatus = {
+  res.status(200).json({
     status: "ok",
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
@@ -34,21 +37,24 @@ app.get("/api/health", (req, res) => {
       heapUsed: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
     },
     version: process.version,
-  };
-
-  res.status(200).json(healthStatus);
+  });
 });
 
+// Production: Serve static assets
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "..", "client", "dist")));
+  app.use(express.static(path.join(__dirname, "../client/dist")));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "client", "dist", "index.html"));
+    res.sendFile(path.resolve(__dirname, "../client/dist/index.html"));
   });
 }
 
+// Global Error Handler (must be last)
+app.use(errorHandler);
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  connectDB();
 });
 
 module.exports = app;

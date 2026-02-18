@@ -1,8 +1,26 @@
 const CATEGORIES = ["food", "transport", "utilities", "entertainment", "health", "shopping", "other"];
 
-export default function ExpenseFilters({ category, sortDesc, onCategoryChange, onSortChange }) {
+export default function ExpenseFilters({ category, sortDesc, onCategoryChange, onSortChange, search, onSearchChange }) {
     return (
         <div className="filters">
+            <div className="filter-group" style={{ flex: 2 }}>
+                <label htmlFor="search">Search</label>
+                <input
+                    id="search"
+                    type="text"
+                    placeholder="Search descriptions..."
+                    value={search}
+                    onChange={(e) => onSearchChange(e.target.value)}
+                    style={{
+                        padding: "0.45rem 0.6rem",
+                        border: "1px solid #ccc",
+                        borderRadius: "5px",
+                        fontSize: "0.88rem",
+                        background: "#fafafa"
+                    }}
+                />
+            </div>
+
             <div className="filter-group">
                 <label htmlFor="filter-category">Filter by category</label>
                 <select

@@ -16,13 +16,42 @@ class ExpenseService {
     return expense;
   }
 
-  async getExpenses({ category, sort } = {}) {
+  async getExpenses({ category, sort, page = 1, limit = 50, search = "" }) {
+    // 1. Build initial filters
     const filters = buildFilters({ category });
     filters.isActive = true;
-    const sortStrategy = getSortStrategy(sort);
 
-    const query = Expense.find(filters);
-    return sortStrategy.apply(query).exec();
+    // 2. Add search filter
+    if (search) {
+      filters.description = { $regex: search, $options: "i" };
+    }
+
+    // 3. Count total for pagination
+    const total = await Expense.countDocuments(filters);
+
+    // 4. Create base query with filters
+    let query = Expense.find(filters);
+
+    // 5. Apply sorting
+    const sortStrategy = getSortStrategy(sort);
+    query = sortStrategy.apply(query);
+
+    // 6. Apply pagination
+    const skip = (page - 1) * limit;
+    query = query.skip(skip).limit(Number(limit));
+
+    // 7. Execute query
+    const expenses = await query.exec();
+
+    return {
+      data: expenses,
+      meta: {
+        total,
+        page: Number(page),
+        pages: Math.ceil(total / limit),
+        limit: Number(limit),
+      },
+    };
   }
 
   async editExpense(id, data) {

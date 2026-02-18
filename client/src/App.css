@@ -564,8 +564,72 @@ body {
   }
 }
 
+/* ─── Skeleton Loading ─── */
+.skeleton-row td {
+  padding: 1rem;
+}
+
+.skeleton-box {
+  height: 1rem;
+  background: #e0e0e0;
+  border-radius: 4px;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* ─── Pagination ─── */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--gray-300);
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--gray-700);
+  transition: all 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+  border-color: var(--green-600);
+  color: var(--green-700);
+}
+
+.pagination button:disabled {
+  background: var(--gray-100);
+  color: var(--gray-400);
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 0.9rem;
+  color: var(--gray-500);
+}
+
 /* ─── Responsive: Mobile (≤ 600px) ─── */
 @media (max-width: 600px) {
+
   .app-header {
     padding: 1.1rem 1rem;
     text-align: center;

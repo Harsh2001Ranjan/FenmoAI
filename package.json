@@ -1,0 +1,19 @@
+{
+  "name": "fenmoai",
+  "version": "1.0.0",
+  "description": "FenmoAI - MERN Stack Application",
+  "scripts": {
+    "dev": "concurrently \"node --watch server/index.js\" \"client/node_modules/.bin/vite.cmd client\" --names \"server,client\" --prefix-colors \"cyan,magenta\"",
+    "dev:server": "node --watch server/index.js",
+    "dev:client": "client/node_modules/.bin/vite.cmd client",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+    "build": "cd client && npm run build",
+    "start": "cd server && node index.js"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import ExpenseForm from "./components/ExpenseForm";
+import CategoryChart from "./components/CategoryChart";
 import ExpenseFilters from "./components/ExpenseFilters";
 import ExpenseList from "./components/ExpenseList";
 import ExpenseSummary from "./components/ExpenseSummary";
@@ -48,6 +49,7 @@ export default function App() {
             editingExpense={editingExpense}
             onCancelEdit={() => setEditingExpense(null)}
           />
+          <CategoryChart expenses={expenses} />
         </section>
 
         <section className="list-section">

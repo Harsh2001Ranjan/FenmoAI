@@ -257,6 +257,23 @@ Exceeding limits returns a JSON `{ "error": "Too many requests..." }` with statu
 
 ---
 
+## Trade-offs & Future Scope
+
+### Intentional Omissions (Timebox)
+*   **Authentication:** Skipped Auth0/JWT. The app is designed as a single-user instance. Adding multi-tenancy would require a User model and middleware, which was out of scope for this architecture demo.
+*   **Frontend Testing:** Focused 100% of testing effort on the **Backend (Business Logic & Validation)**. React interaction tests (Cypress/RTL) were descoped to prioritize core data integrity.
+*   **Docker:** Used `concurrently` for local development simplicity. A production container setup was omitted in favor of a direct Render blueprint deployment.
+
+### Tech Choices
+*   **Vanilla CSS vs Tailwind:** I chose raw CSS Variables.
+    *   *Trade-off:* Writing CSS takes longer than utility classes.
+    *   *Benefit:* Zero-dependency styling, smaller bundle size, and demonstration of core CSS mastery (Grid/Flexbox) without framework crutches.
+*   **Prop Drilling vs Context/Redux:**
+    *   *Decision:* State is lifted to `App.jsx`.
+    *   *Rationale:* For a component tree only 3 levels deep, Redux is over-engineering. Prop drilling is explicit and easier to debug for this scale.
+
+---
+
 ## Deployment (Render)
 
 1. Connect the repo to [Render](https://render.com) → New → Blueprint
